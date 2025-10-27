@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Management Portal</title>
+  <style>
+  /* ======= Global Styles ======= */
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: 
+      linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+      url('https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&w=1600&q=80') no-repeat center center/cover;
+    color: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    overflow-x: hidden;
+  }
+
+  h1 {
+    font-size: 42px;
+    margin-bottom: 40px;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+
+  /* ======= Section Card ======= */
+  .section {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.4);
+    padding: 30px 40px;
+    width: 85%;
+    max-width: 900px;
+    margin-bottom: 40px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(0, 255, 255, 0.3);
+  }
+
+  h2 {
+    font-size: 26px;
+    color: #00ffff;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+    border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+    display: inline-block;
+    padding-bottom: 5px;
+  }
+
+  /* ======= Inputs & Buttons ======= */
+  input, select {
+    width: 260px;
+    padding: 10px 12px;
+    margin: 8px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    font-size: 15px;
+    color: #333;
+  }
+
+  .small-input {
+    width: 150px;
+  }
+
+  .btn {
+    background: linear-gradient(45deg, #00ffff, #0066ff);
+    border: none;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+    margin: 8px;
+    box-shadow: 0 4px 15px rgba(0, 255, 255, 0.4);
+  }
+
+  .btn:hover {
+    transform: scale(1.07);
+    box-shadow: 0 8px 25px rgba(0, 255, 255, 0.6);
+    background: linear-gradient(45deg, #00ccff, #0066ff);
+  }
+
+  /* ======= Table Styles ======= */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  th, td {
+    padding: 12px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: left;
+  }
+
+  th {
+    background: rgba(0, 255, 255, 0.2);
+    font-weight: 600;
+  }
+
+  tr:hover {
+    background: rgba(0, 255, 255, 0.1);
+    transition: 0.2s;
+  }
+
+  /* ======= Flex Row (Inline) ======= */
+  .inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* ======= Responsive ======= */
+  @media (max-width: 600px) {
+    body {
+      padding: 20px 10px;
+    }
+    .section {
+      width: 95%;
+      padding: 25px;
+    }
+    h1 {
+      font-size: 32px;
+    }
+    input {
+      width: 100%;
+    }
+    .btn {
+      width: 100%;
+    }
+  }
+</style>
+
+</head>
+<body>
+  <h1>🧑‍💼 User Management Portal</h1>
+
+  <!-- ✅ Add User -->
+  <div class="section">
+    <h2>Add New User</h2><br><center>
+    <input type="text" id="name" placeholder="Full Name"><br>
+    <input type="email" id="email" placeholder="Email Address"><br>
+    <input type="text" id="contactNo" placeholder="Contact Number"><br>
+    <input type="text" id="role" placeholder="User Role"><br>
+    <button class="btn" onclick="addUser()">➕ Add User</button>
+    </center>
+  </div>
+
+  <!-- ✅ All Users -->
+  <div class="section">
+    <h2>All Users</h2>
+    <button class="btn" onclick="getAllUsers()">🔄 Refresh List</button>
+    <table id="userTable">
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Contact No</th>
+          <th>Role</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- ✅ Search User -->
+  <div class="section">
+    <h2>Search User by ID</h2>
+    <div class="inline">
+      <input type="number" id="searchId" placeholder="Enter User ID" class="small-input">
+      <button class="btn" onclick="getUserById()">🔍 Search</button>
+    </div>
+    <div id="searchResult" style="margin-top: 15px;"></div>
+  </div>
+
+  <!-- ✅ Update User -->
+  <div class="section">
+    <h2>Update User</h2><br><center>
+    <input type="number" id="updateId" placeholder="User ID"><br>
+    <input type="text" id="updateName" placeholder="New Name"><br>
+    <input type="email" id="updateEmail" placeholder="New Email"><br>
+    <input type="text" id="updateContact" placeholder="New Contact No"><br>
+    <input type="text" id="updateRole" placeholder="New Role"><br>
+    <button class="btn" onclick="updateUser()">✏️ Update User</button>
+    </center>
+  </div>
+
+  <!-- ✅ Delete User -->
+  <div class="section">
+    <h2>Delete User</h2>
+    <div class="inline">
+      <input type="number" id="deleteId" placeholder="Enter User ID" class="small-input">
+      <button class="btn" onclick="deleteUser()">🗑️ Delete</button>
+    </div>
+  </div>
+
+  <!-- ✅ Login -->
+  <div class="section">
+    <h2>User Login</h2><br><center>
+    <input type="number" id="loginUserId" placeholder="User ID"><br>
+    <input type="text" id="loginContact" placeholder="Contact No"><br>
+    <button class="btn" onclick="loginUser()">🔑 Login</button>
+    </center>
+  </div>
+
+  <script>
+    const baseUrl = "http://localhost:8080/api/users";
+
+    function addUser() {
+      const user = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        contactNo: document.getElementById("contactNo").value,
+        role: document.getElementById("role").value
+      };
+      fetch(baseUrl + "/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user)
+      })
+      .then(res => res.text())
+      .then(msg => { alert(msg); getAllUsers(); })
+      .catch(err => alert("Error: " + err));
+    }
+
+    function getAllUsers() {
+      fetch(baseUrl + "/all")
+      .then(res => res.json())
+      .then(users => {
+        const tbody = document.querySelector("#userTable tbody");
+        tbody.innerHTML = "";
+        users.forEach(u => {
+          const row = `<tr>
+            <td>${u.userId}</td>
+            <td>${u.name}</td>
+            <td>${u.email}</td>
+            <td>${u.contactNo}</td>
+            <td>${u.role}</td>
+            <td>
+              <button class="btn" style="padding:6px 12px;font-size:13px;" onclick="fillUpdateForm(${u.userId}, '${u.name}', '${u.email}', '${u.contactNo}', '${u.role}')">✏️ Edit</button>
+              <button class="btn" style="padding:6px 12px;font-size:13px;background:linear-gradient(45deg,#ff4b2b,#ff416c);" onclick="deleteUser(${u.userId})">🗑️ Delete</button>
+            </td>
+          </tr>`;
+          tbody.innerHTML += row;
+        });
+      });
+    }
+
+    function getUserById() {
+      const id = document.getElementById("searchId").value;
+      if (!id) return alert("Enter User ID");
+      fetch(`${baseUrl}/${id}`)
+      .then(res => {
+        if (!res.ok) throw new Error("User not found");
+        return res.json();
+      })
+      .then(u => {
+        document.getElementById("searchResult").innerHTML = `
+          <p><b>ID:</b> ${u.userId}</p>
+          <p><b>Name:</b> ${u.name}</p>
+          <p><b>Email:</b> ${u.email}</p>
+          <p><b>Contact No:</b> ${u.contactNo}</p>
+          <p><b>Role:</b> ${u.role}</p>`;
+      })
+      .catch(err => document.getElementById("searchResult").innerHTML = `<p style='color:#ffb3b3;'>${err.message}</p>`);
+    }
+
+    function fillUpdateForm(id, name, email, contactNo, role) {
+      document.getElementById("updateId").value = id;
+      document.getElementById("updateName").value = name;
+      document.getElementById("updateEmail").value = email;
+      document.getElementById("updateContact").value = contactNo;
+      document.getElementById("updateRole").value = role;
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    }
+
+    function updateUser() {
+      const id = document.getElementById("updateId").value;
+      const user = {
+        name: document.getElementById("updateName").value,
+        email: document.getElementById("updateEmail").value,
+        contactNo: document.getElementById("updateContact").value,
+        role: document.getElementById("updateRole").value
+      };
+      fetch(`${baseUrl}/update/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user)
+      })
+      .then(res => res.text())
+      .then(msg => { alert(msg); getAllUsers(); })
+      .catch(err => alert("Error: " + err));
+    }
+
+    function deleteUser(idParam) {
+      const id = idParam || document.getElementById("deleteId").value;
+      if (!id) return alert("Enter User ID to delete");
+      if (!confirm("Are you sure you want to delete user ID " + id + "?")) return;
+      fetch(`${baseUrl}/delete/${id}`, { method: "DELETE" })
+      .then(res => res.text())
+      .then(msg => { alert(msg); getAllUsers(); })
+      .catch(err => alert("Error: " + err));
+    }
+
+    function loginUser() {
+      const loginData = {
+        userId: document.getElementById("loginUserId").value,
+        contactNo: document.getElementById("loginContact").value
+      };
+      fetch(baseUrl + "/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginData)
+      })
+      .then(res => res.text())
+      .then(msg => alert(msg))
+      .catch(err => alert("Error: " + err));
+    }
+
+    window.onload = getAllUsers;
+  </script>
+</body>
+</html>

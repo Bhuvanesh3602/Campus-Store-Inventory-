@@ -1,0 +1,4 @@
+com\example\databasedomo\model\User.class
+com\example\databasedomo\DatabasedomoApplication.class
+com\example\databasedomo\repository\UserRepository.class
+com\example\databasedomo\controller\UserController.class

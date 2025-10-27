@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sales Management</title>
+  <style>
+    /* 🌆 Global Styles */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: 
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url('https://images.unsplash.com/photo-1581091012184-5c69b3d1c7af?auto=format&fit=crop&w=1600&q=80') 
+        no-repeat center center/cover;
+      color: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      font-size: 42px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: #ffffff;
+      text-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+    }
+
+    h2 {
+      font-size: 26px;
+      color: #00ffff;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+      border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    /* 🌐 Section Container */
+    .section {
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      padding: 30px 40px;
+      width: 85%;
+      max-width: 900px;
+      margin-bottom: 40px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 40px rgba(0, 255, 255, 0.3);
+    }
+
+    /* 🧩 Inputs & Buttons */
+    input {
+      width: 250px;
+      padding: 12px;
+      margin: 8px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      color: #333;
+    }
+
+    button {
+      background: linear-gradient(45deg, #00ffff, #0066ff);
+      border: none;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+      margin: 8px;
+      box-shadow: 0 4px 15px rgba(0, 255, 255, 0.4);
+    }
+
+    button:hover {
+      transform: scale(1.07);
+      box-shadow: 0 8px 25px rgba(0, 255, 255, 0.6);
+      background: linear-gradient(45deg, #00ccff, #0066ff);
+    }
+
+    /* 📊 Table Design */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    th {
+      background: rgba(0, 255, 255, 0.2);
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background: rgba(0, 255, 255, 0.1);
+      transition: 0.2s;
+    }
+
+    /* 📱 Responsive Design */
+    @media (max-width: 600px) {
+      body {
+        padding: 20px 10px;
+      }
+
+      .section {
+        width: 95%;
+        padding: 25px;
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+
+      input {
+        width: 100%;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>💼 Sales Management Portal</h1>
+
+  <!-- 🧾 Record a Sale -->
+  <div class="section">
+    <h2>Record a Sale</h2><br><center>
+    <input type="number" id="userId" placeholder="User ID"><br>
+    <input type="number" id="itemId" placeholder="Item ID"><br>
+    <input type="number" id="quantity" placeholder="Quantity"><br>
+    <button onclick="recordSale()">💰 Record Sale</button>
+    </center>
+  </div>
+
+  <!-- 👤 Sales By User -->
+  <div class="section">
+    <h2>Sales By User</h2><br><center>
+    <input type="number" id="saleUserId" placeholder="User ID">
+    <button onclick="getSalesByUser()">🔍 View</button>
+    <table id="salesByUserTable">
+      <thead>
+        <tr>
+          <th>Sale ID</th>
+          <th>Item Name</th>
+          <th>User Name</th>
+          <th>Quantity</th>
+          <th>Total Price</th>
+          <th>Sale Date</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    </center>
+  </div>
+
+  <!-- 📦 Sales By Item -->
+  <div class="section">
+    <h2>Sales By Item</h2><br><center>
+    <input type="number" id="saleItemId" placeholder="Item ID">
+    <button onclick="getSalesByItem()">🔍 View</button>
+    <table id="salesByItemTable">
+      <thead>
+        <tr>
+          <th>Sale ID</th>
+          <th>Item Name</th>
+          <th>User Name</th>
+          <th>Quantity</th>
+          <th>Total Price</th>
+          <th>Sale Date</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    </center>
+  </div>
+
+  <script>
+    const baseUrl = "http://localhost:8080/api/sales";
+
+    // Record a Sale
+    function recordSale() {
+      const sale = {
+        user: { userId: parseInt(document.getElementById("userId").value) },
+        item: { itemId: parseInt(document.getElementById("itemId").value) },
+        quantity: parseInt(document.getElementById("quantity").value)
+      };
+
+      fetch(`${baseUrl}/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(sale)
+      })
+      .then(res => res.text())
+      .then(msg => alert(msg))
+      .catch(err => alert("Error: " + err));
+    }
+
+    // Get Sales By User
+    function getSalesByUser() {
+      const userId = document.getElementById("saleUserId").value;
+      fetch(`${baseUrl}/user/${userId}`)
+      .then(res => res.json())
+      .then(sales => {
+        const tbody = document.querySelector("#salesByUserTable tbody");
+        tbody.innerHTML = "";
+        sales.forEach(s => {
+          const row = `<tr>
+              <td>${s.saleId}</td>
+              <td>${s.item.name}</td>
+              <td>${s.user.name}</td>
+              <td>${s.quantity}</td>
+              <td>${s.totalPrice}</td>
+              <td>${new Date(s.saleDate).toLocaleString()}</td>
+          </tr>`;
+          tbody.innerHTML += row;
+        });
+      })
+      .catch(err => alert("Error: " + err));
+    }
+
+    // Get Sales By Item
+    function getSalesByItem() {
+      const itemId = document.getElementById("saleItemId").value;
+      fetch(`${baseUrl}/item/${itemId}`)
+      .then(res => res.json())
+      .then(sales => {
+        const tbody = document.querySelector("#salesByItemTable tbody");
+        tbody.innerHTML = "";
+        sales.forEach(s => {
+          const row = `<tr>
+              <td>${s.saleId}</td>
+              <td>${s.item.name}</td>
+              <td>${s.user.name}</td>
+              <td>${s.quantity}</td>
+              <td>${s.totalPrice}</td>
+              <td>${new Date(s.saleDate).toLocaleString()}</td>
+          </tr>`;
+          tbody.innerHTML += row;
+        });
+      })
+      .catch(err => alert("Error: " + err));
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Items Management</title>
+  <style>
+    /* ===== General Layout ===== */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        url('https://images.unsplash.com/photo-1607082349566-187342f7e5df?auto=format&fit=crop&w=1600&q=80')
+        no-repeat center center/cover;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 38px;
+      margin-bottom: 25px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+      text-align: center;
+    }
+
+    /* ===== Section Cards ===== */
+    .section {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+      padding: 30px 40px;
+      width: 85%;
+      max-width: 900px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #fff;
+      margin-bottom: 20px;
+      font-size: 24px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    /* ===== Input Fields ===== */
+    input[type="text"],
+    input[type="number"] {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      width: 240px;
+      font-size: 15px;
+      margin: 6px;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      box-shadow: 0 0 10px rgba(0, 150, 255, 0.5);
+    }
+
+    /* ===== Buttons ===== */
+    .btn {
+      background: linear-gradient(45deg, #0072ff, #00c6ff);
+      border: none;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+      box-shadow: 0 4px 15px rgba(0, 114, 255, 0.4);
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 25px rgba(0, 114, 255, 0.6);
+      background: linear-gradient(45deg, #00c6ff, #0072ff);
+    }
+
+    /* ===== Table Styling ===== */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+      color: #fff;
+    }
+
+    th, td {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(6px);
+    }
+
+    tr:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 600px) {
+      .section {
+        width: 95%;
+        padding: 25px;
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🛒 Items Management</h1>
+
+  <div class="section">
+    <h2>Add New Item</h2>
+    <div>
+      <input type="text" id="name" placeholder="Name"><br>
+      <input type="text" id="category" placeholder="Category"><br>
+      <input type="number" id="price" placeholder="Price" step="0.01"><br>
+      <input type="number" id="stockQuantity" placeholder="Stock Quantity"><br>
+      <button class="btn" onclick="addItem()">Add Item</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>All Items</h2>
+    <button class="btn" onclick="getAllItems()">Refresh List</button>
+    <table id="itemTable">
+      <thead>
+        <tr>
+          <th>Item ID</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Stock</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const baseUrl = "http://localhost:8080/api/items";
+
+    function addItem() {
+      const item = {
+        name: document.getElementById("name").value,
+        category: document.getElementById("category").value,
+        price: parseFloat(document.getElementById("price").value),
+        stockQuantity: parseInt(document.getElementById("stockQuantity").value)
+      };
+
+      if (!item.name || !item.category || isNaN(item.price) || isNaN(item.stockQuantity)) {
+        alert("Please fill all fields correctly.");
+        return;
+      }
+
+      fetch(baseUrl + "/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(item)
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert(msg);
+        getAllItems();
+      })
+      .catch(err => alert("Error: " + err));
+    }
+
+    function getAllItems() {
+      fetch(baseUrl + "/all")
+        .then(res => res.json())
+        .then(items => {
+          const tbody = document.querySelector("#itemTable tbody");
+          tbody.innerHTML = "";
+          items.forEach(i => {
+            const row = `<tr>
+              <td>${i.itemId}</td>
+              <td>${i.name}</td>
+              <td>${i.category}</td>
+              <td>₹${i.price.toFixed(2)}</td>
+              <td>${i.stockQuantity}</td>
+            </tr>`;
+            tbody.innerHTML += row;
+          });
+        })
+        .catch(err => alert("Error fetching items: " + err));
+    }
+
+    window.onload = getAllItems;
+  </script>
+</body>
+</html>

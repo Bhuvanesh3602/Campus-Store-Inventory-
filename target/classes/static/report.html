@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reports Dashboard</title>
+  <style>
+    /* ===== General Layout ===== */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: url('https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=1600&q=80') no-repeat center center/cover;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 40px;
+      margin-bottom: 30px;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+
+    /* ===== Section Cards ===== */
+    .section {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+      padding: 30px 40px;
+      width: 80%;
+      max-width: 900px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    h2 {
+      color: white;
+      margin-bottom: 20px;
+      font-size: 26px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    /* ===== Input and Buttons ===== */
+    input[type="number"] {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      width: 180px;
+      font-size: 15px;
+      margin-right: 10px;
+    }
+    .sestion p{
+        color:black;
+    }
+
+    .btn {
+      background: linear-gradient(45deg, #8a2be2, #ff00ff);
+      border: none;
+      color: black;
+      padding: 12px 25px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+      box-shadow: 0 4px 15px rgba(255, 0, 255, 0.4);
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 25px rgba(255, 0, 255, 0.6);
+      background: linear-gradient(45deg, #ff00ff, #8a2be2);
+    }
+
+    /* ===== Table Styling ===== */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+      color: black;
+    }
+
+    th, td {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+    }
+
+    tr:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* ===== Total Sales Styling ===== */
+    #totalSales {
+      font-size: 22px;
+      margin-top: 20px;
+      font-weight: 600;
+      color: black;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 600px) {
+      .section {
+        width: 95%;
+        padding: 25px;
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>📊 Reports Dashboard</h1>
+
+  <div class="section">
+    <h2>Low Stock Items</h2><br>
+    <input type="number" id="minQuantity" placeholder="Enter minimum stock" value="10">
+    <button class="btn" onclick="getLowStock()">View Low Stock Items</button>
+
+    <table id="lowStockTable">
+      <thead>
+        <tr>
+          <th>Item ID</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Stock Quantity</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Total Sales</h2>
+    <button class="btn" onclick="getTotalSales()">View Total Sales</button>
+    <p id="totalSales"></p>
+  </div>
+
+  <script>
+    const baseUrl = "http://localhost:8080/api/reports";
+
+    function getLowStock() {
+      const minQty = document.getElementById("minQuantity").value || 10;
+      fetch(`${baseUrl}/low-stock?minQuantity=${minQty}`)
+        .then(res => res.json())
+        .then(items => {
+          const tbody = document.querySelector("#lowStockTable tbody");
+          tbody.innerHTML = "";
+          items.forEach(i => {
+            const row = `<tr>
+              <td>${i.itemId}</td>
+              <td>${i.name}</td>
+              <td>${i.category}</td>
+              <td>${i.stockQuantity}</td>
+            </tr>`;
+            tbody.innerHTML += row;
+          });
+        })
+        .catch(err => alert("Error: " + err));
+    }
+
+    function getTotalSales() {
+      fetch(`${baseUrl}/totalsales`)
+        .then(res => res.text())
+        .then(amount => {
+          document.getElementById("totalSales").innerText = "₹ " + amount;
+        })
+        .catch(err => alert("Error: " + err));
+    }
+  </script>
+</body>
+</html>

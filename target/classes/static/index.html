@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Campus Store Inventory</title>
+  <style>
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url('/image/BEAUTIFUL-WALLPAPER.png') no-repeat center center/cover;
+  font-family: 'Poppins', sans-serif;
+}
+
+
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+      padding: 40px 60px;
+      text-align: center;
+      color: #170857;
+    }
+
+    h2 {
+      font-size: 28px;
+      margin-bottom: 25px;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    .btn {
+      display: block;
+      width: 220px;
+      margin: 12px auto;
+      padding: 14px;
+      font-size: 16px;
+      color: #fff;
+      background: linear-gradient(45deg, #8a2be2, #ff00ff);
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+    }
+
+    .btn:hover {
+      transform: scale(1.07);
+      box-shadow: 0 8px 25px rgba(255, 0, 255, 0.5);
+      background: linear-gradient(45deg, #ff00ff, #8a2be2);
+    }
+
+    /* ul {
+      list-style-type: none;
+      padding: 0;
+    } */
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Campus Store Inventory</h2>
+    <ul>
+      <li><button class="btn" onclick="location.href='user.html'">Manage Users</button></li>
+      <li><button class="btn" onclick="location.href='item.html'">Manage Items</button></li>
+      <li><button class="btn" onclick="location.href='sale.html'">View Sales</button></li>
+      <li><button class="btn" onclick="location.href='report.html'">Reports</button></li>
+    </ul>
+  </div>
+</body>
+</html>
