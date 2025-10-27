@@ -12,4 +12,6 @@ Students and staff can view available items (optional: place orders).
 
 ### Project Architecture
 <img width="500" height="400" alt="Screenshot 2025-10-26 223039" src="https://github.com/user-attachments/assets/8973628b-9bdf-4827-bdd1-03d0e8523339" />
+<img width="500" height="400" alt="Screenshot 2025-10-27 100053" src="https://github.com/user-attachments/assets/4e28e02b-e38f-4910-abc5-f394fe9e5a06" />
+
 
