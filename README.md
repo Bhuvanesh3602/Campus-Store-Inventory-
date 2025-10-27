@@ -11,5 +11,5 @@ Students and staff can view available items (optional: place orders).
 **Tools:**: Maven / Gradle, Lombok
 
 ### Project Architecture
-<img width="910" height="668" alt="Screenshot 2025-10-26 223039" src="https://github.com/user-attachments/assets/8973628b-9bdf-4827-bdd1-03d0e8523339" />
+<img width="500" height="400" alt="Screenshot 2025-10-26 223039" src="https://github.com/user-attachments/assets/8973628b-9bdf-4827-bdd1-03d0e8523339" />
 
