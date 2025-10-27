@@ -5,7 +5,7 @@ Track inventory levels and product sales.
 Generate reports for low-stock items and total sales.
 Students and staff can view available items (optional: place orders).
 ### Tech Stack
-**Backend:**Spring Boot (Spring Web, Spring Data JPA)
+**Backend:** Spring Boot (Spring Web, Spring Data JPA)
 **Database:** MySQL
 **Frontend:** Thymeleaf (optional UI)
 **Tools:**: Maven / Gradle, Lombok
