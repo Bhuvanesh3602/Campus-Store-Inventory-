@@ -3,7 +3,7 @@
 Admins can manage store items (add, update, delete)
 Track inventory levels and product sales.
 Generate reports for low-stock items and total sales.
-Students and staff can view available items (optional: place orders).
+Students and staff can view available items (optional: place orders)
 ### Tech Stack
 **Backend:** Spring Boot (Spring Web, Spring Data JPA)
 **Database:** MySQL
